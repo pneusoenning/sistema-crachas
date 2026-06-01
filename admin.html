@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin | Sistema de Crachás</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#333}
+    :root{
+      --primary:#1a237e;
+      --success:#43a047;
+      --danger:#e53935;
+      --shadow:0 4px 20px rgba(0,0,0,0.1)
+    }
+
+    /* NAVBAR */
+    .navbar{
+      background:var(--primary);color:white;
+      padding:15px 30px;display:flex;
+      align-items:center;justify-content:space-between;
+      box-shadow:var(--shadow)
+    }
+    .navbar .logo{font-size:1.3rem;font-weight:800;letter-spacing:1px}
+    .navbar .logo span{color:#ff5252}
+
+    /* CONTAINER */
+    .container{max-width:1200px;margin:30px auto;padding:0 20px}
+
+    /* HEADER */
+    .list-header{
+      display:flex;justify-content:space-between;
+      align-items:center;flex-wrap:wrap;
+      gap:10px;margin-bottom:24px
+    }
+    .list-header h1{font-size:1.5rem;color:var(--primary)}
+
+    /* BUSCA */
+    .busca-input{
+      padding:10px 16px;border:2px solid #e0e0e0;
+      border-radius:8px;font-size:0.9rem;width:250px;
+      font-family:'Inter',sans-serif
+    }
+    .busca-input:focus{outline:none;border-color:var(--primary)}
+
+    /* BOTÕES */
+    .btn{
+      padding:9px 18px;border:none;border-radius:8px;
+      cursor:pointer;font-size:0.83rem;font-weight:700;
+      transition:opacity 0.2s;font-family:'Inter',sans-serif
+    }
+    .btn:hover{opacity:0.85}
+    .btn-primary{background:var(--primary);color:white}
+    .btn-danger{background:var(--danger);color:white}
+    .btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+
+    /* GRID */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:20px
+    }
+
+    /* CARD FUNCIONÁRIO */
+    .card-funcionario{
+      background:white;border-radius:16px;padding:24px;
+      box-shadow:var(--shadow);display:flex;flex-direction:column;
+      align-items:center;gap:10px;transition:transform 0.2s
+    }
+    .card-funcionario:hover{transform:translateY(-4px)}
+
+    .foto-circulo{
+      width:80px;height:80px;border-radius:50%;
+      object-fit:cover;border:3px solid var(--primary)
+    }
+    .foto-placeholder{
+      width:80px;height:80px;border-radius:50%;
+      background:#e8eaf6;display:flex;align-items:center;
+      justify-content:center;font-size:2rem;
+      border:3px solid var(--primary)
+    }
+    .card-nome{font-size:1rem;font-weight:700;color:var(--primary);text-align:center}
+    .card-doc{font-size:0.82rem;color:#666}
+
+    .badge{
+      padding:4px 14px;border-radius:20px;font-size:0.75rem;
+      font-weight:700;text-transform:uppercase;letter-spacing:0.5px
+    }
+    .badge-ativo{background:#e8f5e9;color:var(--success);border:1px solid var(--success)}
+    .badge-inativo{background:#ffebee;color:var(--danger);border:1px solid var(--danger)}
+
+    .card-acoes{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:60px 20px;color:#aaa;grid-column:1/-1}
+    .empty-state .icon{font-size:4rem;display:block;margin-bottom:10px}
+
+    /* MODAL */
+    .modal-overlay{
+      display:none;position:fixed;inset:0;
+      background:rgba(0,0,0,0.55);z-index:1000;
+      justify-content:center;align-items:center
+    }
+    .modal-overlay.ativo{display:flex}
+    .modal{
+      background:white;border-radius:16px;padding:32px;
+      width:90%;max-width:460px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.3);
+      max-height:90vh;overflow-y:auto
+    }
+    .modal h2{color:var(--primary);margin-bottom:20px;font-size:1.2rem}
+
+    .form-group{margin-bottom:14px}
+    .form-group label{
+      display:block;font-size:0.82rem;font-weight:600;
+      color:#555;margin-bottom:5px
+    }
+    .form-group input,
+    .form-group select{
+      width:100%;padding:10px 13px;border:2px solid #e0e0e0;
+      border-radius:8px;font-size:0.9rem;
+      font-family:'Inter',sans-serif;transition:border-color 0.2s
+    }
+    .form-group input:focus,
+    .form-group select:focus{outline:none;border-color:var(--primary)}
+
+    .modal-acoes{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+    /* PREVIEW FOTO */
+    #fotoPreview{
+      width:80px;height:80px;border-radius:50%;
+      background:#e8eaf6;display:flex;align-items:center;
+      justify-content:center;font-size:2rem;
+      border:3px solid var(--primary);
+      margin:0 auto 12px;overflow:hidden
+    }
+
+    /* QR MODAL */
+    .qr-container{text-align:center;padding:10px}
+    .qr-label{margin-top:8px;font-size:0.78rem;color:#999}
+
+    /* ALERTA */
+    .alerta{
+      background:#e8f5e9;border:1px solid #a5d6a7;
+      border-radius:10px;padding:12px 16px;
+      font-size:0.82rem;color:#2e7d32;
+      margin-bottom:16px;text-align:center
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">CRACHÁ<span>DIGITAL</span></div>
+  <span style="font-size:0.82rem;opacity:0.8;">Painel Administrativo</span>
+</nav>
+
+<div class="container">
+  <div class="list-header">
+    <h1>👥 Funcionários</h1>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <input type="text" id="busca" class="busca-input"
+        placeholder="🔍 Buscar funcionário..."
+        oninput="filtrarFuncionarios()"/>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Funcionário</button>
+    </div>
+  </div>
+
+  <div class="cards-grid" id="listaFuncionarios"></div>
+</div>
+
+<!-- MODAL CADASTRO/EDIÇÃO -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitulo">➕ Novo Funcionário</h2>
+    <div id="fotoPreview">👤</div>
+    <form id="formFuncionario" onsubmit="salvarFuncionario(event)">
+      <div class="form-group">
+        <label>📸 Foto do Funcionário</label>
+        <input type="file" id="inputFoto" accept="image/*" onchange="previewFoto(event)"/>
+      </div>
+      <div class="form-group">
+        <label>👤 Nome Completo *</label>
+        <input type="text" id="inputNome" placeholder="Ex: João da Silva" required/>
+      </div>
+      <div class="form-group">
+        <label>🪪 Documento do Colaborador *</label>
+        <input type="text" id="inputDoc" placeholder="Ex: 123.456.789-00" required/>
+      </div>
+      <div class="form-group">
+        <label>📌 Situação *</label>
+        <select id="inputSituacao" required>
+          <option value="Ativo">✅ Ativo</option>
+          <option value="Inativo">❌ Inativo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>🏢 Cargo / Setor</label>
+        <input type="text" id="inputCargo" placeholder="Ex: Analista de TI"/>
+      </div>
+      <div class="modal-acoes">
+        <button type="button" class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">💾 Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL QR CODE -->
+<div class="modal-overlay" id="modalQR">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <h2>📱 QR Code do Funcionário</h2>
+    <p id="qrNomeFuncionario" style="color:#666;margin-bottom:8px;font-size:0.9rem;font-weight:600"></p>
+    <div class="alerta">
+      ✅ Funciona em qualquer celular!<br/>Os dados estão dentro do QR Code.
+    </div>
+    <div class="qr-container">
+      <div id="qrCodeDiv"></div>
+      <p class="qr-label">Escaneie para ver os dados</p>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-primary" onclick="baixarQR()">⬇️ Baixar QR</button>
+      <button class="btn btn-outline" onclick="fecharQR()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   BANCO DE DADOS — localStorage
+══════════════════════════════════════ */
+const DB = {
+  getAll(){
+    const d = localStorage.getItem('funcionarios');
+    return d ? JSON.parse(d) : [];
+  },
+  getById(id){
+    return this.getAll().find(f => f.id === id) || null;
+  },
+  save(func){
+    const lista = this.getAll();
+    func.id = 'func_' + Date.now();
+    func.criadoEm = new Date().toISOString();
+    lista.push(func);
+    localStorage.setItem('funcionarios', JSON.stringify(lista));
+    return func;
+  },
+  update(id, dados){
+    let lista = this.getAll();
+    lista = lista.map(f => f.id === id ? {...f, ...dados} : f);
+    localStorage.setItem('funcionarios', JSON.stringify(lista));
+  },
+  delete(id){
+    const lista = this.getAll().filter(f => f.id !== id);
+    localStorage.setItem('funcionarios', JSON.stringify(lista));
+  }
+};
+
+/* ══════════════════════════════════════
+   VARIÁVEIS
+══════════════════════════════════════ */
+let editandoId = null;
+let fotoBase64 = null;
+
+/* ══════════════════════════════════════
+   RENDERIZAR CARDS
+══════════════════════════════════════ */
+function renderizarFuncionarios(lista){
+  const container = document.getElementById('listaFuncionarios');
+  const dados = lista !== undefined ? lista : DB.getAll();
+  container.innerHTML = '';
+
+  if(dados.length === 0){
+    container.innerHTML = `
+      <div class="empty-state">
+        <span class="icon">👥</span>
+        <p style="font-size:1rem;font-weight:600">Nenhum funcionário cadastrado ainda.</p>
+        <p style="margin-top:6px;font-size:0.85rem">
+          Clique em <strong>"+ Novo Funcionário"</strong> para começar!
+        </p>
+      </div>`;
+    return;
+  }
+
+  dados.forEach(func => {
+    const foto = func.foto
+      ? `<img src="${func.foto}" class="foto-circulo" alt="Foto"/>`
+      : `<div class="foto-placeholder">👤</div>`;
+
+    const badgeCls  = func.situacao === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
+    const badgeIcon = func.situacao === 'Ativo' ? '✅' : '❌';
+
+    container.innerHTML += `
+      <div class="card-funcionario">
+        ${foto}
+        <div class="card-nome">${func.nome}</div>
+        <div class="card-doc">🪪 ${func.documento}</div>
+        ${func.cargo ? `<div class="card-doc">💼 ${func.cargo}</div>` : ''}
+        <span class="badge ${badgeCls}">${badgeIcon} ${func.situacao}</span>
+        <div class="card-acoes">
+          <button class="btn btn-primary" onclick="verQR('${func.id}')">📱 QR</button>
+          <button class="btn btn-outline" onclick="editarFuncionario('${func.id}')">✏️ Editar</button>
+          <button class="btn btn-danger"  onclick="excluirFuncionario('${func.id}')">🗑️</button>
+        </div>
+      </div>`;
+  });
+}
+
+/* ══════════════════════════════════════
+   BUSCA
+══════════════════════════════════════ */
+function filtrarFuncionarios(){
+  const t = document.getElementById('busca').value.toLowerCase();
+  const filtrados = DB.getAll().filter(f =>
+    f.nome.toLowerCase().includes(t) ||
+    f.documento.toLowerCase().includes(t) ||
+    (f.cargo && f.cargo.toLowerCase().includes(t))
+  );
+  renderizarFuncionarios(filtrados);
+}
+
+/* ══════════════════════════════════════
+   MODAL
+══════════════════════════════════════ */
+function abrirModal(){
+  editandoId = null;
+  fotoBase64 = null;
+  document.getElementById('inputNome').value     = '';
+  document.getElementById('inputDoc').value      = '';
+  document.getElementById('inputSituacao').value = 'Ativo';
+  document.getElementById('inputCargo').value    = '';
+  document.getElementById('inputFoto').value     = '';
+  document.getElementById('fotoPreview').innerHTML = '👤';
+  document.getElementById('modalTitulo').textContent = '➕ Novo Funcionário';
+  document.getElementById('modalOverlay').classList.add('ativo');
+}
+
+function fecharModal(){
+  document.getElementById('modalOverlay').classList.remove('ativo');
+}
+
+/* ══════════════════════════════════════
+   EDITAR
+══════════════════════════════════════ */
+function editarFuncionario(id){
+  const func = DB.getById(id);
+  if(!func) return;
+  editandoId = id;
+  fotoBase64 = func.foto || null;
+  document.getElementById('inputNome').value     = func.nome;
+  document.getElementById('inputDoc').value      = func.documento;
+  document.getElementById('inputSituacao').value = func.situacao;
+  document.getElementById('inputCargo').value    = func.cargo || '';
+  document.getElementById('fotoPreview').innerHTML = func.foto
+    ? `<img src="${func.foto}" style="width:80px;height:80px;object-fit:cover;border-radius:50%"/>`
+    : '👤';
+  document.getElementById('modalTitulo').textContent = '✏️ Editar Funcionário';
+  document.getElementById('modalOverlay').classList.add('ativo');
+}
+
+/* ══════════════════════════════════════
+   PREVIEW FOTO
+══════════════════════════════════════ */
+function previewFoto(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    fotoBase64 = e.target.result;
+    document.getElementById('fotoPreview').innerHTML =
+      `<img src="${fotoBase64}" style="width:80px;height:80px;object-fit:cover;border-radius:50%"/>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ══════════════════════════════════════
+   SALVAR
+══════════════════════════════════════ */
+function salvarFuncionario(event){
+  event.preventDefault();
+  const dados = {
+    nome:      document.getElementById('inputNome').value.trim(),
+    documento: document.getElementById('inputDoc').value.trim(),
+    situacao:  document.getElementById('inputSituacao').value,
+    cargo:     document.getElementById('inputCargo').value.trim(),
+    foto:      fotoBase64 || null
+  };
+  if(editandoId){ DB.update(editandoId, dados); }
+  else           { DB.save(dados); }
+  fecharModal();
+  renderizarFuncionarios();
+}
+
+/* ══════════════════════════════════════
+   EXCLUIR
+══════════════════════════════════════ */
+function excluirFuncionario(id){
+  const func = DB.getById(id);
+  if(!confirm(`Deseja excluir "${func.nome}"?`)) return;
+  DB.delete(id);
+  renderizarFuncionarios();
+}
+
+/* ══════════════════════════════════════
+   QR CODE — dados na URL (funciona no celular!)
+══════════════════════════════════════ */
+function verQR(id){
+  const func = DB.getById(id);
+  if(!func) return;
+
+  // Monta os dados do funcionário na URL
+  // Assim o celular não precisa de banco de dados!
+  const baseUrl = 'https://pneusoenning.github.io/sistema-crachas/funcionario.html';
+
+  const params = new URLSearchParams({
+    nome:      func.nome,
+    documento: func.documento,
+    situacao:  func.situacao,
+    cargo:     func.cargo     || '',
+    criado:    func.criadoEm  || '',
+    foto:      func.foto      || ''
+  });
+
+  const url = `${baseUrl}?${params.toString()}`;
+
+  document.getElementById('qrNomeFuncionario').textContent = func.nome;
+  document.getElementById('qrCodeDiv').innerHTML = '';
+
+  new QRCode(document.getElementById('qrCodeDiv'), {
+    text: url,
+    width: 220,
+    height: 220,
+    colorDark:  '#1a237e',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M  // M para suportar URLs maiores
+  });
+
+  document.getElementById('modalQR').classList.add('ativo');
+}
+
+function fecharQR(){
+  document.getElementById('modalQR').classList.remove('ativo');
+  document.getElementById('qrCodeDiv').innerHTML = '';
+}
+
+function baixarQR(){
+  const canvas = document.querySelector('#qrCodeDiv canvas');
+  if(!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'qrcode-funcionario.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', renderizarFuncionarios);
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</body>
+</html>
