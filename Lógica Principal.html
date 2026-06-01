@@ -1,0 +1,224 @@
+// js/app.js
+
+let editandoId = null;      // ID do funcionário sendo editado
+let fotoBase64 = null;      // Foto em base64
+let qrInstance = null;      // Instância do QR Code atual
+
+// =============================================
+// RENDERIZA OS CARDS NA TELA
+// =============================================
+function renderizarFuncionarios(lista = null) {
+  const container = document.getElementById('listaFuncionarios');
+  const funcionarios = lista || DB.getAll();
+  container.innerHTML = '';
+
+  if (funcionarios.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">👥</div>
+        <p>Nenhum funcionário cadastrado ainda.</p>
+        <p style="margin-top:8px; font-size:0.85rem;">
+          Clique em "Novo Funcionário" para começar!
+        </p>
+      </div>`;
+    return;
+  }
+
+  funcionarios.forEach(func => {
+    const fotoHTML = func.foto
+      ? `<img src="${func.foto}" class="foto-circulo" alt="Foto"/>`
+      : `<div class="foto-placeholder">👤</div>`;
+
+    const badgeClass = func.situacao === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
+    const badgeIcon  = func.situacao === 'Ativo' ? '✅' : '❌';
+
+    container.innerHTML += `
+      <div class="card-funcionario">
+        ${fotoHTML}
+        <div class="card-nome">${func.nome}</div>
+        <div class="card-doc">🪪 ${func.documento}</div>
+        ${func.cargo ? `<div class="card-doc">💼 ${func.cargo}</div>` : ''}
+        <span class="badge ${badgeClass}">${badgeIcon} ${func.situacao}</span>
+        <div class="card-acoes">
+          <button class="btn btn-primary" onclick="verQR('${func.id}')">
+            📱 QR Code
+          </button>
+          <button class="btn btn-outline" onclick="editarFuncionario('${func.id}')">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-danger" onclick="excluirFuncionario('${func.id}')">
+            🗑️
+          </button>
+        </div>
+      </div>`;
+  });
+}
+
+// =============================================
+// FILTRO DE BUSCA
+// =============================================
+function filtrarFuncionarios() {
+  const termo = document.getElementById('busca').value.toLowerCase();
+  const todos  = DB.getAll();
+  const filtrados = todos.filter(f =>
+    f.nome.toLowerCase().includes(termo) ||
+    f.documento.toLowerCase().includes(termo) ||
+    (f.cargo && f.cargo.toLowerCase().includes(termo))
+  );
+  renderizarFuncionarios(filtrados);
+}
+
+// =============================================
+// MODAL - ABRIR / FECHAR
+// =============================================
+function abrirModal(func = null) {
+  editandoId = null;
+  fotoBase64 = null;
+
+  // Limpa o formulário
+  document.getElementById('inputNome').value      = '';
+  document.getElementById('inputDoc').value       = '';
+  document.getElementById('inputSituacao').value  = 'Ativo';
+  document.getElementById('inputCargo').value     = '';
+  document.getElementById('inputFoto').value      = '';
+  document.getElementById('fotoPreview').innerHTML = '👤';
+  document.getElementById('fotoPreview').style.backgroundImage = '';
+
+  document.getElementById('modalTitulo').textContent = '➕ Novo Funcionário';
+  document.getElementById('modalOverlay').classList.add('ativo');
+}
+
+function fecharModal() {
+  document.getElementById('modalOverlay').classList.remove('ativo');
+}
+
+// =============================================
+// EDITAR FUNCIONÁRIO
+// =============================================
+function editarFuncionario(id) {
+  const func = DB.getById(id);
+  if (!func) return;
+
+  editandoId = id;
+  fotoBase64 = func.foto || null;
+
+  document.getElementById('inputNome').value     = func.nome;
+  document.getElementById('inputDoc').value      = func.documento;
+  document.getElementById('inputSituacao').value = func.situacao;
+  document.getElementById('inputCargo').value    = func.cargo || '';
+
+  // Mostra foto no preview
+  const preview = document.getElementById('fotoPreview');
+  if (func.foto) {
+    preview.innerHTML = `
+      <img src="${func.foto}" class="foto-circulo" style="width:80px;height:80px;"/>`;
+  } else {
+    preview.innerHTML = '👤';
+  }
+
+  document.getElementById('modalTitulo').textContent = '✏️ Editar Funcionário';
+  document.getElementById('modalOverlay').classList.add('ativo');
+}
+
+// =============================================
+// PREVIEW DA FOTO
+// =============================================
+function previewFoto(event) {
+  const file   = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    fotoBase64 = e.target.result;
+    const preview = document.getElementById('fotoPreview');
+    preview.innerHTML = `
+      <img src="${fotoBase64}" class="foto-circulo" style="width:80px;height:80px;"/>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// =============================================
+// SALVAR FUNCIONÁRIO (NOVO OU EDIÇÃO)
+// =============================================
+function salvarFuncionario(event) {
+  event.preventDefault();
+
+  const dados = {
+    nome:      document.getElementById('inputNome').value.trim(),
+    documento: document.getElementById('inputDoc').value.trim(),
+    situacao:  document.getElementById('inputSituacao').value,
+    cargo:     document.getElementById('inputCargo').value.trim(),
+    foto:      fotoBase64 || null
+  };
+
+  if (editandoId) {
+    DB.update(editandoId, dados);
+  } else {
+    DB.save(dados);
+  }
+
+  fecharModal();
+  renderizarFuncionarios();
+}
+
+// =============================================
+// EXCLUIR FUNCIONÁRIO
+// =============================================
+function excluirFuncionario(id) {
+  const func = DB.getById(id);
+  if (!confirm(`Deseja excluir "${func.nome}"?`)) return;
+  DB.delete(id);
+  renderizarFuncionarios();
+}
+
+// =============================================
+// VER QR CODE
+// =============================================
+function verQR(id) {
+  const func = DB.getById(id);
+  if (!func) return;
+
+  // URL que será aberta ao escanear
+  // Ajuste o domínio para o seu servidor!
+  const url = `${window.location.origin}/funcionario.html?id=${func.id}`;
+
+  document.getElementById('qrNomeFuncionario').textContent = func.nome;
+  document.getElementById('qrCodeDiv').innerHTML = '';
+
+  // Gera o QR Code
+  qrInstance = new QRCode(document.getElementById('qrCodeDiv'), {
+    text: url,
+    width: 220,
+    height: 220,
+    colorDark: '#1a237e',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  document.getElementById('modalQR').classList.add('ativo');
+}
+
+function fecharQR() {
+  document.getElementById('modalQR').classList.remove('ativo');
+  document.getElementById('qrCodeDiv').innerHTML = '';
+}
+
+// =============================================
+// BAIXAR QR CODE COMO IMAGEM
+// =============================================
+function baixarQR() {
+  const canvas = document.querySelector('#qrCodeDiv canvas');
+  if (!canvas) return;
+
+  const link    = document.createElement('a');
+  link.download = 'qrcode-funcionario.png';
+  link.href     = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// =============================================
+// INICIALIZAÇÃO
+// =============================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderizarFuncionarios();
+});
