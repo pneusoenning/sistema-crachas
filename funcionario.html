@@ -7,62 +7,44 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-
     body{
-      font-family:'Inter',sans-serif;
-      min-height:100vh;
+      font-family:'Inter',sans-serif;min-height:100vh;
       background:linear-gradient(135deg,#1565C0 0%,#1976D2 60%,#42A5F5 100%);
       display:flex;align-items:center;justify-content:center;padding:20px
     }
-
     .id-card{
-      width:100%;max-width:390px;
-      background:#fff;border-radius:24px;
-      overflow:hidden;
+      width:100%;max-width:390px;background:#fff;
+      border-radius:24px;overflow:hidden;
       box-shadow:0 25px 60px rgba(0,0,0,0.3)
     }
-
-    /* HEADER */
     .card-header{
       background:linear-gradient(135deg,#1565C0 0%,#1976D2 50%,#42A5F5 100%);
-      padding:28px 24px 75px;
-      text-align:center;position:relative
+      padding:28px 24px 75px;text-align:center;position:relative
     }
     .card-header-title{
-      color:rgba(255,255,255,0.85);
-      font-size:0.8rem;font-weight:600;
-      text-transform:uppercase;letter-spacing:2px;
-      margin-bottom:10px
+      color:rgba(255,255,255,0.85);font-size:0.8rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:2px;margin-bottom:10px
     }
     .empresa-nome{
-      color:white;font-size:1.2rem;
-      font-weight:800;text-transform:uppercase;letter-spacing:2px
+      color:white;font-size:1.2rem;font-weight:800;
+      text-transform:uppercase;letter-spacing:2px
     }
-
-    /* FOTO SOBREPOSTA */
     .foto-wrapper{
-      position:absolute;bottom:-55px;
-      left:50%;transform:translateX(-50%)
+      position:absolute;bottom:-55px;left:50%;transform:translateX(-50%)
     }
     .foto-circular{
       width:110px;height:110px;border-radius:50%;
       border:5px solid #fff;object-fit:cover;
-      box-shadow:0 8px 25px rgba(0,0,0,0.2);
-      background:#e8eaf6;display:block
+      box-shadow:0 8px 25px rgba(0,0,0,0.2);display:block
     }
     .foto-placeholder-card{
       width:110px;height:110px;border-radius:50%;
       border:5px solid #fff;
       background:linear-gradient(135deg,#e8eaf6,#c5cae9);
       display:flex;align-items:center;justify-content:center;
-      font-size:3rem;
-      box-shadow:0 8px 25px rgba(0,0,0,0.2)
+      font-size:3rem;box-shadow:0 8px 25px rgba(0,0,0,0.2)
     }
-
-    /* CORPO */
     .card-body{padding:70px 24px 24px}
-
-    /* CAMPOS */
     .info-field{
       background:#f7f7f7;border-radius:12px;
       padding:13px 16px;margin-bottom:10px
@@ -71,51 +53,45 @@
       font-size:0.68rem;font-weight:700;color:#aaa;
       text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px
     }
-    .field-value{
-      font-size:1rem;font-weight:700;color:#1a1a1a
-    }
-
-    /* SITUAÇÃO */
+    .field-value{font-size:1rem;font-weight:700;color:#1a1a1a}
     .situacao-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-
     .badge-ativo-card{
-      background:#e8f5e9;color:#2e7d32;
-      border:2px solid #a5d6a7;border-radius:20px;
-      padding:4px 16px;font-size:0.82rem;
+      background:#e8f5e9;color:#2e7d32;border:2px solid #a5d6a7;
+      border-radius:20px;padding:4px 16px;font-size:0.82rem;
       font-weight:800;text-transform:uppercase;letter-spacing:1px
     }
     .badge-inativo-card{
-      background:#ffebee;color:#c62828;
-      border:2px solid #ef9a9a;border-radius:20px;
-      padding:4px 16px;font-size:0.82rem;
+      background:#ffebee;color:#c62828;border:2px solid #ef9a9a;
+      border-radius:20px;padding:4px 16px;font-size:0.82rem;
       font-weight:800;text-transform:uppercase;letter-spacing:1px
     }
-
     .verificado-text{
       display:flex;align-items:center;gap:5px;
       font-size:0.82rem;font-weight:600
     }
-
-    /* RODAPÉ */
     .card-footer{
       border-top:1px solid #f0f0f0;
       padding:14px 24px;text-align:center
     }
     .card-footer p{font-size:0.75rem;color:#bbb;font-weight:500}
-
-    /* STATUS */
     .status-box{text-align:center;padding:60px 24px;color:#aaa}
     .status-box .icon{font-size:3rem;display:block;margin-bottom:12px}
+    .spinner{
+      width:40px;height:40px;border:4px solid #e0e0e0;
+      border-top:4px solid #1565C0;border-radius:50%;
+      animation:spin 0.8s linear infinite;margin:0 auto 16px
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
-
 <div class="id-card">
 
   <!-- CARREGANDO -->
   <div class="status-box" id="loading">
-    <span class="icon">⏳</span>
-    <p>Carregando dados...</p>
+    <div class="spinner"></div>
+    <p style="font-weight:600;color:#555">Buscando dados...</p>
+    <p style="font-size:0.8rem;margin-top:4px">Aguarde um momento</p>
   </div>
 
   <!-- ERRO -->
@@ -127,38 +103,27 @@
 
   <!-- CONTEÚDO -->
   <div id="conteudo" style="display:none">
-
     <div class="card-header">
       <div class="card-header-title">Cartão de Identificação</div>
       <div class="empresa-nome">🏢 Minha Empresa</div>
-
       <div class="foto-wrapper">
         <img id="cardFoto" class="foto-circular" src="" alt="Foto" style="display:none"/>
         <div class="foto-placeholder-card" id="cardFotoPlaceholder">👤</div>
       </div>
     </div>
-
     <div class="card-body">
-
-      <!-- NOME -->
       <div class="info-field">
         <div class="field-label">Nome Completo</div>
         <div class="field-value" id="cardNome">—</div>
       </div>
-
-      <!-- DOCUMENTO -->
       <div class="info-field">
         <div class="field-label">Documento Colaborador</div>
         <div class="field-value" id="cardDoc">—</div>
       </div>
-
-      <!-- CARGO -->
       <div class="info-field" id="cardCargoBox" style="display:none">
         <div class="field-label">Cargo / Setor</div>
         <div class="field-value" id="cardCargo">—</div>
       </div>
-
-      <!-- SITUAÇÃO -->
       <div class="info-field">
         <div class="field-label">Situação</div>
         <div class="situacao-row">
@@ -168,64 +133,75 @@
           </span>
         </div>
       </div>
-
     </div>
-
     <div class="card-footer">
       <p>✓ Cartão válido e verificado</p>
-      <p style="margin-top:3px">Cadastrado em <span id="cardData">—</span></p>
+      <p style="margin-top:3px">
+        Cadastrado em <span id="cardData">—</span>
+      </p>
     </div>
-
   </div>
+
 </div>
 
 <script>
-  // ════════════════════════════════════════
-  // Lê os dados direto da URL do QR Code
-  // Funciona em qualquer celular! ✅
-  // ════════════════════════════════════════
-  const params   = new URLSearchParams(window.location.search);
-  const nome     = params.get('nome');
-  const documento= params.get('documento');
-  const situacao = params.get('situacao');
-  const cargo    = params.get('cargo');
-  const criado   = params.get('criado');
-  const foto     = params.get('foto');
+  const params = new URLSearchParams(window.location.search);
+  const id     = params.get('id');
+  const binId  = params.get('bin');
+  const apiKey = params.get('key');
 
-  const elLoading  = document.getElementById('loading');
-  const elErro     = document.getElementById('erro');
-  const elConteudo = document.getElementById('conteudo');
+  async function carregarDados() {
+    if (!id || !binId || !apiKey) {
+      mostrarErro();
+      return;
+    }
 
-  // Se não tem nome, é inválido
-  if(!nome || !documento){
-    elLoading.style.display = 'none';
-    elErro.style.display    = 'block';
-  } else {
+    try {
+      const res = await fetch(
+        `https://api.jsonbin.io/v3/b/${binId}/latest`,
+        { headers: { 'X-Master-Key': apiKey } }
+      );
 
+      if (!res.ok) throw new Error('Erro ' + res.status);
+
+      const data = await res.json();
+      const lista = data.record.funcionarios || [];
+      const func  = lista.find(f => f.id === id);
+
+      if (!func) { mostrarErro(); return; }
+
+      preencherCard(func);
+
+    } catch(e) {
+      mostrarErro();
+    }
+  }
+
+  function preencherCard(func) {
     // FOTO
-    if(foto && foto.length > 10){
+    if (func.foto) {
       const img = document.getElementById('cardFoto');
-      img.src = foto;
+      img.src = func.foto;
       img.style.display = 'block';
       document.getElementById('cardFotoPlaceholder').style.display = 'none';
     }
 
     // NOME
-    document.getElementById('cardNome').textContent = nome;
+    document.getElementById('cardNome').textContent = func.nome;
 
     // DOCUMENTO
-    document.getElementById('cardDoc').textContent = documento;
+    document.getElementById('cardDoc').textContent = func.documento;
 
     // CARGO
-    if(cargo){
-      document.getElementById('cardCargo').textContent = cargo;
+    if (func.cargo) {
+      document.getElementById('cardCargo').textContent = func.cargo;
       document.getElementById('cardCargoBox').style.display = 'block';
     }
 
-    // SITUAÇÃO
+    // SITUAÇÃO — sempre atualizada! ✅
     const badge      = document.getElementById('cardBadge');
     const verificado = document.getElementById('verificadoText');
-    if(situacao === 'Ativo'){
+    if (func.situacao === 'Ativo') {
       badge.textContent      = 'ATIVO';
       badge.className        = 'badge-ativo-card';
       verificado.innerHTML   = '✅ Identidade Verificada';
@@ -238,16 +214,22 @@
     }
 
     // DATA
-    if(criado){
-      const d = new Date(criado);
+    if (func.criadoEm) {
       document.getElementById('cardData').textContent =
-        d.toLocaleDateString('pt-BR');
+        new Date(func.criadoEm).toLocaleDateString('pt-BR');
     }
 
-    elLoading.style.display  = 'none';
-    elConteudo.style.display = 'block';
+    document.getElementById('loading').style.display  = 'none';
+    document.getElementById('conteudo').style.display = 'block';
   }
-</script>
 
+  function mostrarErro() {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('erro').style.display    = 'block';
+  }
+
+  // Carrega ao abrir a página
+  carregarDados();
+</script>
 </body>
 </html>
