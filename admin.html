@@ -10,45 +10,48 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#333}
     :root{
-      --primary:#1a237e;
-      --success:#43a047;
-      --danger:#e53935;
-      --shadow:0 4px 20px rgba(0,0,0,0.1)
+      --primary:#1a237e;--success:#43a047;
+      --danger:#e53935;--shadow:0 4px 20px rgba(0,0,0,0.1)
     }
     .navbar{
-      background:var(--primary);color:white;
-      padding:15px 30px;display:flex;
-      align-items:center;justify-content:space-between;
+      background:var(--primary);color:white;padding:15px 30px;
+      display:flex;align-items:center;justify-content:space-between;
       box-shadow:var(--shadow)
     }
     .navbar .logo{font-size:1.3rem;font-weight:800;letter-spacing:1px}
     .navbar .logo span{color:#ff5252}
+    .navbar-right{display:flex;align-items:center;gap:12px}
+    .status-badge{
+      font-size:0.78rem;padding:4px 10px;border-radius:20px;
+      font-weight:600
+    }
+    .status-ok{background:#43a047;color:white}
+    .status-erro{background:#e53935;color:white}
     .container{max-width:1200px;margin:30px auto;padding:0 20px}
     .list-header{
       display:flex;justify-content:space-between;
-      align-items:center;flex-wrap:wrap;
-      gap:10px;margin-bottom:24px
+      align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:24px
     }
     .list-header h1{font-size:1.5rem;color:var(--primary)}
     .busca-input{
-      padding:10px 16px;border:2px solid #e0e0e0;
-      border-radius:8px;font-size:0.9rem;width:250px;
-      font-family:'Inter',sans-serif
+      padding:10px 16px;border:2px solid #e0e0e0;border-radius:8px;
+      font-size:0.9rem;width:250px;font-family:'Inter',sans-serif
     }
     .busca-input:focus{outline:none;border-color:var(--primary)}
     .btn{
-      padding:9px 18px;border:none;border-radius:8px;
-      cursor:pointer;font-size:0.83rem;font-weight:700;
-      transition:opacity 0.2s;font-family:'Inter',sans-serif
+      padding:9px 18px;border:none;border-radius:8px;cursor:pointer;
+      font-size:0.83rem;font-weight:700;transition:opacity 0.2s;
+      font-family:'Inter',sans-serif
     }
     .btn:hover{opacity:0.85}
     .btn-primary{background:var(--primary);color:white}
     .btn-danger{background:var(--danger);color:white}
     .btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+    .btn-warning{background:#f57c00;color:white}
+    .btn-sm{padding:6px 12px;font-size:0.78rem}
     .cards-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-      gap:20px
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px
     }
     .card-funcionario{
       background:white;border-radius:16px;padding:24px;
@@ -61,10 +64,9 @@
       object-fit:cover;border:3px solid var(--primary)
     }
     .foto-placeholder{
-      width:80px;height:80px;border-radius:50%;
-      background:#e8eaf6;display:flex;align-items:center;
-      justify-content:center;font-size:2rem;
-      border:3px solid var(--primary)
+      width:80px;height:80px;border-radius:50%;background:#e8eaf6;
+      display:flex;align-items:center;justify-content:center;
+      font-size:2rem;border:3px solid var(--primary)
     }
     .card-nome{font-size:1rem;font-weight:700;color:var(--primary);text-align:center}
     .card-doc{font-size:0.82rem;color:#666}
@@ -84,9 +86,8 @@
     }
     .modal-overlay.ativo{display:flex}
     .modal{
-      background:white;border-radius:16px;padding:32px;
-      width:90%;max-width:460px;
-      box-shadow:0 20px 60px rgba(0,0,0,0.3);
+      background:white;border-radius:16px;padding:32px;width:90%;
+      max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,0.3);
       max-height:90vh;overflow-y:auto
     }
     .modal h2{color:var(--primary);margin-bottom:20px;font-size:1.2rem}
@@ -95,101 +96,120 @@
       display:block;font-size:0.82rem;font-weight:600;
       color:#555;margin-bottom:5px
     }
-    .form-group input,
-    .form-group select{
+    .form-group input,.form-group select{
       width:100%;padding:10px 13px;border:2px solid #e0e0e0;
-      border-radius:8px;font-size:0.9rem;
-      font-family:'Inter',sans-serif;transition:border-color 0.2s
+      border-radius:8px;font-size:0.9rem;font-family:'Inter',sans-serif;
+      transition:border-color 0.2s
     }
-    .form-group input:focus,
-    .form-group select:focus{outline:none;border-color:var(--primary)}
+    .form-group input:focus,.form-group select:focus{
+      outline:none;border-color:var(--primary)
+    }
     .modal-acoes{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
     #fotoPreview{
-      width:80px;height:80px;border-radius:50%;
-      background:#e8eaf6;display:flex;align-items:center;
-      justify-content:center;font-size:2rem;
-      border:3px solid var(--primary);
-      margin:0 auto 16px;overflow:hidden
+      width:90px;height:90px;border-radius:50%;background:#e8eaf6;
+      display:flex;align-items:center;justify-content:center;font-size:2rem;
+      border:3px solid var(--primary);margin:0 auto 8px;overflow:hidden
+    }
+    .foto-dica{
+      text-align:center;font-size:0.72rem;color:#aaa;margin-bottom:12px
     }
     .qr-container{text-align:center;padding:10px}
     .qr-label{margin-top:8px;font-size:0.78rem;color:#999}
     .alerta-qr{
-      background:#e8f5e9;border:1px solid #a5d6a7;
-      border-radius:10px;padding:10px 14px;
-      font-size:0.8rem;color:#2e7d32;
+      background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;
+      padding:10px 14px;font-size:0.8rem;color:#2e7d32;
       margin-bottom:14px;text-align:center
     }
     .toast{
-      position:fixed;bottom:30px;right:30px;
-      background:#323232;color:white;
-      padding:12px 24px;border-radius:10px;
-      font-size:0.88rem;font-weight:600;
-      opacity:0;transition:opacity 0.3s;
-      z-index:9999;pointer-events:none
+      position:fixed;bottom:30px;right:30px;background:#323232;color:white;
+      padding:12px 24px;border-radius:10px;font-size:0.88rem;font-weight:600;
+      opacity:0;transition:opacity 0.3s;z-index:9999;pointer-events:none
     }
     .toast.show{opacity:1}
-
-    /* CONFIG PANEL */
-    .config-bar{
-      background:#fff3e0;border:1px solid #ffcc02;
-      border-radius:10px;padding:12px 16px;
-      margin-bottom:20px;font-size:0.85rem;
-      display:flex;align-items:center;gap:10px;
-      flex-wrap:wrap
+    .config-aviso{
+      background:#fff8e1;border:1px solid #ffe082;border-radius:10px;
+      padding:10px 14px;font-size:0.8rem;color:#f57c00;
+      margin-bottom:14px
     }
-    .config-bar input{
-      flex:1;min-width:200px;padding:6px 10px;
-      border:1px solid #ccc;border-radius:6px;
-      font-family:'Inter',sans-serif;font-size:0.82rem
+    .input-senha{
+      position:relative
     }
-    .config-bar .btn{padding:6px 14px;font-size:0.8rem}
+    .input-senha input{padding-right:40px}
+    .input-senha .olho{
+      position:absolute;right:10px;top:50%;transform:translateY(-50%);
+      cursor:pointer;font-size:1rem;user-select:none
+    }
   </style>
 </head>
 <body>
 
 <nav class="navbar">
   <div class="logo">CRACHÁ<span>DIGITAL</span></div>
-  <span style="font-size:0.82rem;opacity:0.8">Painel Administrativo</span>
+  <div class="navbar-right">
+    <span class="status-badge status-erro" id="statusBadge">⚠️ Não configurado</span>
+    <button class="btn btn-warning btn-sm" onclick="abrirConfig()">⚙️ Configurar</button>
+  </div>
 </nav>
 
 <div class="container">
-
-  <!-- BARRA DE CONFIGURAÇÃO DO JSONBIN -->
-  <div class="config-bar" id="configBar">
-    ⚙️ <strong>Configure o JSONBin:</strong>
-    <input type="text" id="inputApiKey"
-      placeholder="Cole sua API Key aqui: $2b$10$..."
-      oninput="salvarConfig()"/>
-    <input type="text" id="inputBinId"
-      placeholder="Bin ID (gerado automaticamente)"
-      readonly style="background:#f5f5f5;color:#888"/>
-    <button class="btn btn-primary" onclick="inicializarBin()">
-      🚀 Inicializar Banco
-    </button>
-  </div>
-
   <div class="list-header">
     <h1>👥 Funcionários</h1>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <input type="text" id="busca" class="busca-input"
         placeholder="🔍 Buscar funcionário..."
         oninput="filtrarFuncionarios()"/>
-      <button class="btn btn-primary" onclick="abrirModal()">
-        + Novo Funcionário
-      </button>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Funcionário</button>
     </div>
   </div>
-
   <div class="cards-grid" id="listaFuncionarios"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- MODAL CADASTRO -->
+<!-- ═══ MODAL CONFIGURAÇÃO ═══ -->
+<div class="modal-overlay" id="modalConfig">
+  <div class="modal" style="max-width:480px">
+    <h2>⚙️ Configuração do Banco</h2>
+
+    <div class="config-aviso">
+      🔒 Sua API Key fica salva <strong>apenas neste navegador</strong>.
+      Nunca vai para o código do GitHub!
+    </div>
+
+    <div class="form-group">
+      <label>🔑 X-MASTER-KEY (JSONBin)</label>
+      <div class="input-senha">
+        <input type="password" id="cfgApiKey" placeholder="$2a$10$..."/>
+        <span class="olho" onclick="toggleSenha()">👁️</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>🗄️ Bin ID <small style="color:#aaa">(gerado automaticamente)</small></label>
+      <input type="text" id="cfgBinId"
+        placeholder="Clique em Inicializar para gerar"
+        readonly style="background:#f5f5f5;color:#888"/>
+    </div>
+
+    <div class="config-aviso" style="background:#e3f2fd;border-color:#90caf9;color:#1565c0">
+      💡 <strong>Outro computador?</strong> Coloque a mesma API Key + Bin ID
+      e todos os funcionários aparecerão!
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-danger btn-sm" onclick="limparConfig()">🗑️ Limpar</button>
+      <button class="btn btn-warning" onclick="inicializarBin()">🚀 Inicializar Banco</button>
+      <button class="btn btn-primary" onclick="salvarFecharConfig()">💾 Salvar e Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CADASTRO ═══ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitulo">➕ Novo Funcionário</h2>
     <div id="fotoPreview">👤</div>
+    <p class="foto-dica">📌 Foto reduzida automaticamente (máx. 100x100px)</p>
     <form id="formFuncionario" onsubmit="salvarFuncionario(event)">
       <div class="form-group">
         <label>📸 Foto do Funcionário</label>
@@ -222,14 +242,14 @@
   </div>
 </div>
 
-<!-- MODAL QR CODE -->
+<!-- ═══ MODAL QR CODE ═══ -->
 <div class="modal-overlay" id="modalQR">
   <div class="modal" style="max-width:380px;text-align:center">
     <h2>📱 QR Code</h2>
     <p id="qrNomeFuncionario"
        style="color:#666;margin-bottom:10px;font-size:0.9rem;font-weight:600"></p>
     <div class="alerta-qr">
-      ✅ Situação atualizada em tempo real!
+      ✅ Situação atualizada em tempo real ao escanear!
     </div>
     <div class="qr-container">
       <div id="qrCodeDiv"></div>
@@ -246,90 +266,136 @@
 'use strict';
 
 /* ════════════════════════════════
-   CONFIGURAÇÕES DO JSONBIN
+   CONSTANTES
 ════════════════════════════════ */
-const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
+const JSONBIN = 'https://api.jsonbin.io/v3/b';
 
-// Carrega config salva
-let API_KEY = localStorage.getItem('jb_apikey') || '';
-let BIN_ID  = localStorage.getItem('jb_binid')  || '';
+/* ════════════════════════════════
+   VARIÁVEIS GLOBAIS
+════════════════════════════════ */
+let API_KEY    = '';
+let BIN_ID     = '';
+let editandoId = null;
+let fotoBase64 = null;
+let listaAtual = [];
 
-// Preenche inputs de config
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('inputApiKey').value = API_KEY;
-  document.getElementById('inputBinId').value  = BIN_ID;
-
-  // Esconde barra de config se já configurado
-  if (API_KEY && BIN_ID) {
-    document.getElementById('configBar').style.display = 'none';
-  }
-
+/* ════════════════════════════════
+   INIT — carrega config e dados
+════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  API_KEY = localStorage.getItem('sc_key') || '';
+  BIN_ID  = localStorage.getItem('sc_bin') || '';
+  atualizarStatus();
   carregarFuncionarios();
 });
 
-function salvarConfig() {
-  API_KEY = document.getElementById('inputApiKey').value.trim();
-  localStorage.setItem('jb_apikey', API_KEY);
+/* ════════════════════════════════
+   STATUS NAVBAR
+════════════════════════════════ */
+function atualizarStatus() {
+  const el = document.getElementById('statusBadge');
+  if (API_KEY && BIN_ID) {
+    el.className   = 'status-badge status-ok';
+    el.textContent = '✅ Banco conectado';
+  } else {
+    el.className   = 'status-badge status-erro';
+    el.textContent = '⚠️ Não configurado';
+  }
+}
+
+/* ════════════════════════════════
+   MODAL CONFIG
+════════════════════════════════ */
+function abrirConfig() {
+  document.getElementById('cfgApiKey').value = API_KEY;
+  document.getElementById('cfgBinId').value  = BIN_ID;
+  document.getElementById('modalConfig').classList.add('ativo');
+}
+
+function toggleSenha() {
+  const inp = document.getElementById('cfgApiKey');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function salvarFecharConfig() {
+  const k = document.getElementById('cfgApiKey').value.trim();
+  const b = document.getElementById('cfgBinId').value.trim();
+  if (!k) { alert('Cole sua API Key!'); return; }
+  if (!b) { alert('Clique em "Inicializar Banco" primeiro!'); return; }
+  API_KEY = k;
+  BIN_ID  = b;
+  localStorage.setItem('sc_key', API_KEY);
+  localStorage.setItem('sc_bin', BIN_ID);
+  document.getElementById('modalConfig').classList.remove('ativo');
+  atualizarStatus();
+  showToast('✅ Configuração salva!');
+  carregarFuncionarios();
+}
+
+function limparConfig() {
+  if (!confirm('Limpar configuração do banco?')) return;
+  localStorage.removeItem('sc_key');
+  localStorage.removeItem('sc_bin');
+  API_KEY = ''; BIN_ID = '';
+  document.getElementById('cfgApiKey').value = '';
+  document.getElementById('cfgBinId').value  = '';
+  atualizarStatus();
+  renderizarFuncionarios([]);
+  showToast('🗑️ Config removida!');
 }
 
 /* ════════════════════════════════
    INICIALIZAR BIN (primeira vez)
 ════════════════════════════════ */
 async function inicializarBin() {
-  if (!API_KEY) {
-    alert('Cole sua API Key primeiro!');
-    return;
-  }
+  const k = document.getElementById('cfgApiKey').value.trim();
+  if (!k) { alert('Cole sua API Key primeiro!'); return; }
 
-  showToast('⏳ Criando banco de dados...');
+  showToast('⏳ Criando banco...');
 
   try {
-    const res = await fetch(JSONBIN_URL, {
+    const res = await fetch(JSONBIN, {
       method: 'POST',
       headers: {
-        'Content-Type':    'application/json',
-        'X-Master-Key':    API_KEY,
-        'X-Bin-Name':      'sistema-crachas',
-        'X-Bin-Private':   'false'
+        'Content-Type':  'application/json',
+        'X-Master-Key':  k,
+        'X-Bin-Name':    'sistema-crachas',
+        'X-Bin-Private': 'false'
       },
       body: JSON.stringify({ funcionarios: [] })
     });
 
-    if (!res.ok) throw new Error('Erro ao criar bin: ' + res.status);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Erro ' + res.status);
+    }
 
     const data = await res.json();
-    BIN_ID = data.metadata.id;
-    localStorage.setItem('jb_binid', BIN_ID);
-    document.getElementById('inputBinId').value = BIN_ID;
-
-    showToast('✅ Banco criado com sucesso!');
-
-    // Esconde barra de config
-    setTimeout(() => {
-      document.getElementById('configBar').style.display = 'none';
-    }, 2000);
+    document.getElementById('cfgBinId').value = data.metadata.id;
+    showToast('✅ Banco criado! Clique em Salvar e Fechar.');
 
   } catch(e) {
-    alert('Erro: ' + e.message + '\n\nVerifique sua API Key!');
+    alert('Erro ao criar banco:\n' + e.message +
+          '\n\nDica: Verifique se sua API Key é a X-MASTER-KEY correta!');
   }
 }
 
 /* ════════════════════════════════
-   CARREGAR FUNCIONÁRIOS DO JSONBIN
+   CARREGAR FUNCIONÁRIOS
 ════════════════════════════════ */
 async function carregarFuncionarios() {
-  if (!BIN_ID || !API_KEY) {
+  if (!API_KEY || !BIN_ID) {
     renderizarFuncionarios([]);
     return;
   }
-
   try {
-    const res = await fetch(`${JSONBIN_URL}/${BIN_ID}/latest`, {
+    const res = await fetch(`${JSONBIN}/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
     });
+    if (!res.ok) throw new Error('Erro ' + res.status);
     const data = await res.json();
-    const lista = data.record.funcionarios || [];
-    renderizarFuncionarios(lista);
+    listaAtual = data.record.funcionarios || [];
+    renderizarFuncionarios(listaAtual);
   } catch(e) {
     console.error('Erro ao carregar:', e);
     renderizarFuncionarios([]);
@@ -340,12 +406,7 @@ async function carregarFuncionarios() {
    SALVAR LISTA NO JSONBIN
 ════════════════════════════════ */
 async function salvarNoBin(lista) {
-  if (!BIN_ID || !API_KEY) {
-    alert('Configure o JSONBin primeiro!');
-    return false;
-  }
-
-  const res = await fetch(`${JSONBIN_URL}/${BIN_ID}`, {
+  const res = await fetch(`${JSONBIN}/${BIN_ID}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -353,17 +414,11 @@ async function salvarNoBin(lista) {
     },
     body: JSON.stringify({ funcionarios: lista })
   });
-
-  if (!res.ok) throw new Error('Erro ao salvar: ' + res.status);
-  return true;
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || 'Erro ' + res.status);
+  }
 }
-
-/* ════════════════════════════════
-   VARIÁVEIS GLOBAIS
-════════════════════════════════ */
-let editandoId    = null;
-let fotoBase64    = null;
-let listaAtual    = [];  // cache local
 
 /* ════════════════════════════════
    TOAST
@@ -379,39 +434,40 @@ function showToast(msg) {
    RENDERIZAR CARDS
 ════════════════════════════════ */
 function renderizarFuncionarios(lista) {
-  listaAtual = lista;
-  const container = document.getElementById('listaFuncionarios');
-  container.innerHTML = '';
+  listaAtual = lista || [];
+  const c = document.getElementById('listaFuncionarios');
+  c.innerHTML = '';
 
-  if (!lista || lista.length === 0) {
-    container.innerHTML = `
+  if (listaAtual.length === 0) {
+    c.innerHTML = `
       <div class="empty-state">
         <span class="icon">👥</span>
         <p style="font-size:1rem;font-weight:600">
-          Nenhum funcionário cadastrado ainda.
+          ${!API_KEY || !BIN_ID
+            ? 'Configure o banco clicando em <strong>"⚙️ Configurar"</strong> no topo!'
+            : 'Nenhum funcionário cadastrado ainda.'}
         </p>
-        <p style="margin-top:6px;font-size:0.85rem">
-          Clique em <strong>"+ Novo Funcionário"</strong> para começar!
-        </p>
+        ${API_KEY && BIN_ID
+          ? '<p style="margin-top:6px;font-size:0.85rem">Clique em <strong>"+ Novo Funcionário"</strong>!</p>'
+          : ''}
       </div>`;
     return;
   }
 
-  lista.forEach(func => {
+  listaAtual.forEach(func => {
     const foto = func.foto
       ? `<img src="${func.foto}" class="foto-circulo" alt="Foto"/>`
       : `<div class="foto-placeholder">👤</div>`;
+    const bc = func.situacao === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
+    const bi = func.situacao === 'Ativo' ? '✅' : '❌';
 
-    const badgeCls  = func.situacao === 'Ativo' ? 'badge-ativo'  : 'badge-inativo';
-    const badgeIcon = func.situacao === 'Ativo' ? '✅' : '❌';
-
-    container.innerHTML += `
+    c.innerHTML += `
       <div class="card-funcionario">
         ${foto}
         <div class="card-nome">${func.nome}</div>
         <div class="card-doc">🪪 ${func.documento}</div>
         ${func.cargo ? `<div class="card-doc">💼 ${func.cargo}</div>` : ''}
-        <span class="badge ${badgeCls}">${badgeIcon} ${func.situacao}</span>
+        <span class="badge ${bc}">${bi} ${func.situacao}</span>
         <div class="card-acoes">
           <button class="btn btn-primary"
             onclick="verQR('${func.id}')">📱 QR</button>
@@ -429,18 +485,22 @@ function renderizarFuncionarios(lista) {
 ════════════════════════════════ */
 function filtrarFuncionarios() {
   const t = document.getElementById('busca').value.toLowerCase();
-  const filtrados = listaAtual.filter(f =>
+  const f = listaAtual.filter(f =>
     f.nome.toLowerCase().includes(t) ||
     f.documento.toLowerCase().includes(t) ||
     (f.cargo && f.cargo.toLowerCase().includes(t))
   );
-  renderizarFuncionarios(filtrados);
+  renderizarFuncionarios(f);
 }
 
 /* ════════════════════════════════
-   MODAL
+   MODAL ABRIR/FECHAR
 ════════════════════════════════ */
 function abrirModal() {
+  if (!API_KEY || !BIN_ID) {
+    alert('⚠️ Configure o banco primeiro!\nClique em "⚙️ Configurar" no topo.');
+    return;
+  }
   editandoId = null;
   fotoBase64 = null;
   document.getElementById('inputNome').value     = '';
@@ -463,7 +523,6 @@ function fecharModal() {
 function editarFuncionario(id) {
   const func = listaAtual.find(f => f.id === id);
   if (!func) return;
-
   editandoId = id;
   fotoBase64 = func.foto || null;
   document.getElementById('inputNome').value     = func.nome;
@@ -472,38 +531,50 @@ function editarFuncionario(id) {
   document.getElementById('inputCargo').value    = func.cargo || '';
   document.getElementById('fotoPreview').innerHTML = func.foto
     ? `<img src="${func.foto}"
-         style="width:80px;height:80px;object-fit:cover;border-radius:50%"/>`
+         style="width:90px;height:90px;object-fit:cover;border-radius:50%"/>`
     : '👤';
   document.getElementById('modalTitulo').textContent = '✏️ Editar Funcionário';
   document.getElementById('modalOverlay').classList.add('ativo');
 }
 
 /* ════════════════════════════════
-   PREVIEW FOTO
+   COMPRESSÃO DE FOTO
+   Resolve o erro 403!
+   Máximo 100x100px, qualidade 40%
 ════════════════════════════════ */
-function previewFoto(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+function comprimirFoto(file, callback) {
   const reader = new FileReader();
   reader.onload = function(e) {
     const img = new Image();
     img.onload = function() {
       const canvas = document.createElement('canvas');
-      const MAX = 150;
+      const MAX = 100; // 100x100px máximo
       let w = img.width, h = img.height;
-      if (w > h) { if (w > MAX) { h = h*(MAX/w); w = MAX; } }
-      else        { if (h > MAX) { w = w*(MAX/h); h = MAX; } }
+      if (w > h) {
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      } else {
+        if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      }
       canvas.width  = w;
       canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      fotoBase64 = canvas.toDataURL('image/jpeg', 0.6);
-      document.getElementById('fotoPreview').innerHTML =
-        `<img src="${fotoBase64}"
-           style="width:80px;height:80px;object-fit:cover;border-radius:50%"/>`;
+      // Qualidade 0.4 = 40% — bem pequeno, sem erro 403!
+      callback(canvas.toDataURL('image/jpeg', 0.4));
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
+}
+
+function previewFoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  comprimirFoto(file, function(base64) {
+    fotoBase64 = base64;
+    document.getElementById('fotoPreview').innerHTML =
+      `<img src="${base64}"
+         style="width:90px;height:90px;object-fit:cover;border-radius:50%"/>`;
+  });
 }
 
 /* ════════════════════════════════
@@ -511,10 +582,14 @@ function previewFoto(event) {
 ════════════════════════════════ */
 async function salvarFuncionario(event) {
   event.preventDefault();
+  if (!API_KEY || !BIN_ID) {
+    alert('Configure o banco primeiro!');
+    return;
+  }
 
-  const btnSalvar = document.getElementById('btnSalvar');
-  btnSalvar.textContent = '⏳ Salvando...';
-  btnSalvar.disabled = true;
+  const btn = document.getElementById('btnSalvar');
+  btn.textContent = '⏳ Salvando...';
+  btn.disabled    = true;
 
   const dados = {
     nome:      document.getElementById('inputNome').value.trim(),
@@ -525,21 +600,17 @@ async function salvarFuncionario(event) {
   };
 
   try {
-    // Busca lista atual do JSONBin
-    const res = await fetch(`${JSONBIN_URL}/${BIN_ID}/latest`, {
+    const res = await fetch(`${JSONBIN}/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
     });
+    if (!res.ok) throw new Error('Erro ao buscar lista: ' + res.status);
     const data = await res.json();
     let lista = data.record.funcionarios || [];
 
     if (editandoId) {
-      // Atualiza mantendo o ID original
-      lista = lista.map(f =>
-        f.id === editandoId ? { ...f, ...dados } : f
-      );
+      lista = lista.map(f => f.id === editandoId ? { ...f, ...dados } : f);
       showToast('✅ Funcionário atualizado!');
     } else {
-      // Cria novo com ID único
       dados.id       = 'func_' + Date.now();
       dados.criadoEm = new Date().toISOString();
       lista.push(dados);
@@ -547,14 +618,15 @@ async function salvarFuncionario(event) {
     }
 
     await salvarNoBin(lista);
+    listaAtual = lista;
     fecharModal();
     renderizarFuncionarios(lista);
 
   } catch(e) {
-    alert('Erro ao salvar: ' + e.message);
+    alert('Erro ao salvar:\n' + e.message);
   } finally {
-    btnSalvar.textContent = '💾 Salvar';
-    btnSalvar.disabled = false;
+    btn.textContent = '💾 Salvar';
+    btn.disabled    = false;
   }
 }
 
@@ -565,15 +637,15 @@ async function excluirFuncionario(id) {
   const func = listaAtual.find(f => f.id === id);
   if (!func) return;
   if (!confirm(`Deseja excluir "${func.nome}"?`)) return;
-
   try {
-    const res = await fetch(`${JSONBIN_URL}/${BIN_ID}/latest`, {
+    const res = await fetch(`${JSONBIN}/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
     });
     const data = await res.json();
     const lista = (data.record.funcionarios || []).filter(f => f.id !== id);
     await salvarNoBin(lista);
-    showToast('🗑️ Funcionário removido!');
+    listaAtual = lista;
+    showToast('🗑️ Removido!');
     renderizarFuncionarios(lista);
   } catch(e) {
     alert('Erro ao excluir: ' + e.message);
@@ -581,16 +653,14 @@ async function excluirFuncionario(id) {
 }
 
 /* ════════════════════════════════
-   QR CODE — aponta só para o ID!
-   Situação é lida em tempo real! ✅
+   QR CODE — só ID + BinID na URL
+   Situação sempre atualizada! ✅
 ════════════════════════════════ */
 function verQR(id) {
   const func = listaAtual.find(f => f.id === id);
   if (!func) return;
 
-  // URL com ID + BinID (para o celular buscar os dados)
-  const base = 'https://pneusoenning.github.io/sistema-crachas/funcionario.html';
-  const url  = `${base}?id=${func.id}&bin=${BIN_ID}&key=${API_KEY}`;
+  const url = `https://pneusoenning.github.io/sistema-crachas/funcionario.html?id=${func.id}&bin=${BIN_ID}`;
 
   document.getElementById('qrNomeFuncionario').textContent = func.nome;
   document.getElementById('qrCodeDiv').innerHTML = '';
@@ -618,10 +688,10 @@ function baixarQR() {
   setTimeout(() => {
     const canvas = document.querySelector('#qrCodeDiv canvas');
     if (!canvas) return;
-    const link    = document.createElement('a');
-    link.download = 'qrcode-funcionario.png';
-    link.href     = canvas.toDataURL('image/png');
-    link.click();
+    const a    = document.createElement('a');
+    a.download = 'qrcode-funcionario.png';
+    a.href     = canvas.toDataURL('image/png');
+    a.click();
   }, 300);
 }
 </script>
