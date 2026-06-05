@@ -22,8 +22,8 @@
     .navbar .logo span{color:#ff5252}
     .navbar-right{display:flex;align-items:center;gap:12px}
     .status-badge{
-      font-size:0.78rem;padding:4px 10px;border-radius:20px;
-      font-weight:600
+      font-size:0.78rem;padding:4px 10px;
+      border-radius:20px;font-weight:600
     }
     .status-ok{background:#43a047;color:white}
     .status-erro{background:#e53935;color:white}
@@ -34,8 +34,9 @@
     }
     .list-header h1{font-size:1.5rem;color:var(--primary)}
     .busca-input{
-      padding:10px 16px;border:2px solid #e0e0e0;border-radius:8px;
-      font-size:0.9rem;width:250px;font-family:'Inter',sans-serif
+      padding:10px 16px;border:2px solid #e0e0e0;
+      border-radius:8px;font-size:0.9rem;width:250px;
+      font-family:'Inter',sans-serif
     }
     .busca-input:focus{outline:none;border-color:var(--primary)}
     .btn{
@@ -128,15 +129,16 @@
     .toast.show{opacity:1}
     .config-aviso{
       background:#fff8e1;border:1px solid #ffe082;border-radius:10px;
-      padding:10px 14px;font-size:0.8rem;color:#f57c00;
-      margin-bottom:14px
+      padding:10px 14px;font-size:0.8rem;color:#f57c00;margin-bottom:14px
     }
-    .input-senha{
-      position:relative
+    .config-aviso-azul{
+      background:#e3f2fd;border:1px solid #90caf9;border-radius:10px;
+      padding:10px 14px;font-size:0.8rem;color:#1565c0;margin-bottom:14px
     }
-    .input-senha input{padding-right:40px}
-    .input-senha .olho{
-      position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    .input-wrap{position:relative}
+    .input-wrap input{padding-right:42px}
+    .input-wrap .olho{
+      position:absolute;right:12px;top:50%;transform:translateY(-50%);
       cursor:pointer;font-size:1rem;user-select:none
     }
   </style>
@@ -168,7 +170,7 @@
 
 <!-- ═══ MODAL CONFIGURAÇÃO ═══ -->
 <div class="modal-overlay" id="modalConfig">
-  <div class="modal" style="max-width:480px">
+  <div class="modal" style="max-width:500px">
     <h2>⚙️ Configuração do Banco</h2>
 
     <div class="config-aviso">
@@ -178,28 +180,36 @@
 
     <div class="form-group">
       <label>🔑 X-MASTER-KEY (JSONBin)</label>
-      <div class="input-senha">
-        <input type="password" id="cfgApiKey" placeholder="$2a$10$..."/>
-        <span class="olho" onclick="toggleSenha()">👁️</span>
+      <div class="input-wrap">
+        <input type="password" id="cfgApiKey"
+          placeholder="Cole aqui: $2a$10$..."/>
+        <span class="olho" onclick="toggleSenha('cfgApiKey',this)">👁️</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label>🗄️ Bin ID <small style="color:#aaa">(gerado automaticamente)</small></label>
+      <label>🗄️ Bin ID
+        <small style="color:#aaa;font-weight:400">
+          — cole o ID do bin existente OU clique em Inicializar para criar novo
+        </small>
+      </label>
+      <!-- ✅ SEM readonly — agora você pode digitar! -->
       <input type="text" id="cfgBinId"
-        placeholder="Clique em Inicializar para gerar"
-        readonly style="background:#f5f5f5;color:#888"/>
+        placeholder="Cole o Bin ID aqui (ex: 6840abc123def...)"/>
     </div>
 
-    <div class="config-aviso" style="background:#e3f2fd;border-color:#90caf9;color:#1565c0">
-      💡 <strong>Outro computador?</strong> Coloque a mesma API Key + Bin ID
-      e todos os funcionários aparecerão!
+    <div class="config-aviso-azul">
+      💡 <strong>Outro computador?</strong><br/>
+      Cole a mesma <strong>API Key</strong> + o mesmo <strong>Bin ID</strong>
+      do computador principal e todos os funcionários aparecerão!
     </div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-top:4px">
       <button class="btn btn-danger btn-sm" onclick="limparConfig()">🗑️ Limpar</button>
-      <button class="btn btn-warning" onclick="inicializarBin()">🚀 Inicializar Banco</button>
-      <button class="btn btn-primary" onclick="salvarFecharConfig()">💾 Salvar e Fechar</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-warning" onclick="inicializarBin()">🚀 Criar Novo Banco</button>
+        <button class="btn btn-primary" onclick="salvarFecharConfig()">💾 Salvar e Fechar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -265,23 +275,14 @@
 <script>
 'use strict';
 
-/* ════════════════════════════════
-   CONSTANTES
-════════════════════════════════ */
 const JSONBIN = 'https://api.jsonbin.io/v3/b';
-
-/* ════════════════════════════════
-   VARIÁVEIS GLOBAIS
-════════════════════════════════ */
 let API_KEY    = '';
 let BIN_ID     = '';
 let editandoId = null;
 let fotoBase64 = null;
 let listaAtual = [];
 
-/* ════════════════════════════════
-   INIT — carrega config e dados
-════════════════════════════════ */
+/* ════════ INIT ════════ */
 document.addEventListener('DOMContentLoaded', () => {
   API_KEY = localStorage.getItem('sc_key') || '';
   BIN_ID  = localStorage.getItem('sc_bin') || '';
@@ -289,9 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
   carregarFuncionarios();
 });
 
-/* ════════════════════════════════
-   STATUS NAVBAR
-════════════════════════════════ */
+/* ════════ STATUS ════════ */
 function atualizarStatus() {
   const el = document.getElementById('statusBadge');
   if (API_KEY && BIN_ID) {
@@ -303,25 +302,23 @@ function atualizarStatus() {
   }
 }
 
-/* ════════════════════════════════
-   MODAL CONFIG
-════════════════════════════════ */
+/* ════════ CONFIG ════════ */
 function abrirConfig() {
   document.getElementById('cfgApiKey').value = API_KEY;
   document.getElementById('cfgBinId').value  = BIN_ID;
   document.getElementById('modalConfig').classList.add('ativo');
 }
 
-function toggleSenha() {
-  const inp = document.getElementById('cfgApiKey');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
+function toggleSenha(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  inp.type  = inp.type === 'password' ? 'text' : 'password';
 }
 
 function salvarFecharConfig() {
   const k = document.getElementById('cfgApiKey').value.trim();
   const b = document.getElementById('cfgBinId').value.trim();
-  if (!k) { alert('Cole sua API Key!'); return; }
-  if (!b) { alert('Clique em "Inicializar Banco" primeiro!'); return; }
+  if (!k) { alert('❌ Cole sua API Key!'); return; }
+  if (!b) { alert('❌ Cole o Bin ID ou clique em "Criar Novo Banco"!'); return; }
   API_KEY = k;
   BIN_ID  = b;
   localStorage.setItem('sc_key', API_KEY);
@@ -333,7 +330,7 @@ function salvarFecharConfig() {
 }
 
 function limparConfig() {
-  if (!confirm('Limpar configuração do banco?')) return;
+  if (!confirm('Limpar configuração? Precisará reconfigurar!')) return;
   localStorage.removeItem('sc_key');
   localStorage.removeItem('sc_bin');
   API_KEY = ''; BIN_ID = '';
@@ -344,15 +341,11 @@ function limparConfig() {
   showToast('🗑️ Config removida!');
 }
 
-/* ════════════════════════════════
-   INICIALIZAR BIN (primeira vez)
-════════════════════════════════ */
+/* ════════ INICIALIZAR BIN ════════ */
 async function inicializarBin() {
   const k = document.getElementById('cfgApiKey').value.trim();
   if (!k) { alert('Cole sua API Key primeiro!'); return; }
-
   showToast('⏳ Criando banco...');
-
   try {
     const res = await fetch(JSONBIN, {
       method: 'POST',
@@ -364,30 +357,22 @@ async function inicializarBin() {
       },
       body: JSON.stringify({ funcionarios: [] })
     });
-
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.message || 'Erro ' + res.status);
     }
-
     const data = await res.json();
-    document.getElementById('cfgBinId').value = data.metadata.id;
+    const novoId = data.metadata.id;
+    document.getElementById('cfgBinId').value = novoId;
     showToast('✅ Banco criado! Clique em Salvar e Fechar.');
-
   } catch(e) {
-    alert('Erro ao criar banco:\n' + e.message +
-          '\n\nDica: Verifique se sua API Key é a X-MASTER-KEY correta!');
+    alert('Erro ao criar banco:\n' + e.message);
   }
 }
 
-/* ════════════════════════════════
-   CARREGAR FUNCIONÁRIOS
-════════════════════════════════ */
+/* ════════ CARREGAR ════════ */
 async function carregarFuncionarios() {
-  if (!API_KEY || !BIN_ID) {
-    renderizarFuncionarios([]);
-    return;
-  }
+  if (!API_KEY || !BIN_ID) { renderizarFuncionarios([]); return; }
   try {
     const res = await fetch(`${JSONBIN}/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
@@ -397,14 +382,12 @@ async function carregarFuncionarios() {
     listaAtual = data.record.funcionarios || [];
     renderizarFuncionarios(listaAtual);
   } catch(e) {
-    console.error('Erro ao carregar:', e);
+    console.error(e);
     renderizarFuncionarios([]);
   }
 }
 
-/* ════════════════════════════════
-   SALVAR LISTA NO JSONBIN
-════════════════════════════════ */
+/* ════════ SALVAR NO BIN ════════ */
 async function salvarNoBin(lista) {
   const res = await fetch(`${JSONBIN}/${BIN_ID}`, {
     method: 'PUT',
@@ -420,9 +403,7 @@ async function salvarNoBin(lista) {
   }
 }
 
-/* ════════════════════════════════
-   TOAST
-════════════════════════════════ */
+/* ════════ TOAST ════════ */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -430,14 +411,11 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ════════════════════════════════
-   RENDERIZAR CARDS
-════════════════════════════════ */
+/* ════════ RENDERIZAR ════════ */
 function renderizarFuncionarios(lista) {
   listaAtual = lista || [];
   const c = document.getElementById('listaFuncionarios');
   c.innerHTML = '';
-
   if (listaAtual.length === 0) {
     c.innerHTML = `
       <div class="empty-state">
@@ -453,14 +431,12 @@ function renderizarFuncionarios(lista) {
       </div>`;
     return;
   }
-
   listaAtual.forEach(func => {
     const foto = func.foto
       ? `<img src="${func.foto}" class="foto-circulo" alt="Foto"/>`
       : `<div class="foto-placeholder">👤</div>`;
     const bc = func.situacao === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
     const bi = func.situacao === 'Ativo' ? '✅' : '❌';
-
     c.innerHTML += `
       <div class="card-funcionario">
         ${foto}
@@ -469,40 +445,33 @@ function renderizarFuncionarios(lista) {
         ${func.cargo ? `<div class="card-doc">💼 ${func.cargo}</div>` : ''}
         <span class="badge ${bc}">${bi} ${func.situacao}</span>
         <div class="card-acoes">
-          <button class="btn btn-primary"
-            onclick="verQR('${func.id}')">📱 QR</button>
-          <button class="btn btn-outline"
-            onclick="editarFuncionario('${func.id}')">✏️ Editar</button>
-          <button class="btn btn-danger"
-            onclick="excluirFuncionario('${func.id}')">🗑️</button>
+          <button class="btn btn-primary" onclick="verQR('${func.id}')">📱 QR</button>
+          <button class="btn btn-outline" onclick="editarFuncionario('${func.id}')">✏️ Editar</button>
+          <button class="btn btn-danger" onclick="excluirFuncionario('${func.id}')">🗑️</button>
         </div>
       </div>`;
   });
 }
 
-/* ════════════════════════════════
-   BUSCA
-════════════════════════════════ */
+/* ════════ BUSCA ════════ */
 function filtrarFuncionarios() {
   const t = document.getElementById('busca').value.toLowerCase();
-  const f = listaAtual.filter(f =>
-    f.nome.toLowerCase().includes(t) ||
-    f.documento.toLowerCase().includes(t) ||
-    (f.cargo && f.cargo.toLowerCase().includes(t))
+  renderizarFuncionarios(
+    listaAtual.filter(f =>
+      f.nome.toLowerCase().includes(t) ||
+      f.documento.toLowerCase().includes(t) ||
+      (f.cargo && f.cargo.toLowerCase().includes(t))
+    )
   );
-  renderizarFuncionarios(f);
 }
 
-/* ════════════════════════════════
-   MODAL ABRIR/FECHAR
-════════════════════════════════ */
+/* ════════ MODAL ════════ */
 function abrirModal() {
   if (!API_KEY || !BIN_ID) {
     alert('⚠️ Configure o banco primeiro!\nClique em "⚙️ Configurar" no topo.');
     return;
   }
-  editandoId = null;
-  fotoBase64 = null;
+  editandoId = null; fotoBase64 = null;
   document.getElementById('inputNome').value     = '';
   document.getElementById('inputDoc').value      = '';
   document.getElementById('inputSituacao').value = 'Ativo';
@@ -517,49 +486,36 @@ function fecharModal() {
   document.getElementById('modalOverlay').classList.remove('ativo');
 }
 
-/* ════════════════════════════════
-   EDITAR
-════════════════════════════════ */
+/* ════════ EDITAR ════════ */
 function editarFuncionario(id) {
   const func = listaAtual.find(f => f.id === id);
   if (!func) return;
-  editandoId = id;
-  fotoBase64 = func.foto || null;
+  editandoId = id; fotoBase64 = func.foto || null;
   document.getElementById('inputNome').value     = func.nome;
   document.getElementById('inputDoc').value      = func.documento;
   document.getElementById('inputSituacao').value = func.situacao;
   document.getElementById('inputCargo').value    = func.cargo || '';
   document.getElementById('fotoPreview').innerHTML = func.foto
-    ? `<img src="${func.foto}"
-         style="width:90px;height:90px;object-fit:cover;border-radius:50%"/>`
+    ? `<img src="${func.foto}" style="width:90px;height:90px;object-fit:cover;border-radius:50%"/>`
     : '👤';
   document.getElementById('modalTitulo').textContent = '✏️ Editar Funcionário';
   document.getElementById('modalOverlay').classList.add('ativo');
 }
 
-/* ════════════════════════════════
-   COMPRESSÃO DE FOTO
-   Resolve o erro 403!
-   Máximo 100x100px, qualidade 40%
-════════════════════════════════ */
-function comprimirFoto(file, callback) {
+/* ════════ FOTO ════════ */
+function comprimirFoto(file, cb) {
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = e => {
     const img = new Image();
-    img.onload = function() {
+    img.onload = () => {
       const canvas = document.createElement('canvas');
-      const MAX = 100; // 100x100px máximo
+      const MAX = 100;
       let w = img.width, h = img.height;
-      if (w > h) {
-        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      } else {
-        if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
-      }
-      canvas.width  = w;
-      canvas.height = h;
+      if (w > h) { if (w > MAX) { h = Math.round(h*MAX/w); w = MAX; } }
+      else        { if (h > MAX) { w = Math.round(w*MAX/h); h = MAX; } }
+      canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      // Qualidade 0.4 = 40% — bem pequeno, sem erro 403!
-      callback(canvas.toDataURL('image/jpeg', 0.4));
+      cb(canvas.toDataURL('image/jpeg', 0.4));
     };
     img.src = e.target.result;
   };
@@ -569,28 +525,19 @@ function comprimirFoto(file, callback) {
 function previewFoto(event) {
   const file = event.target.files[0];
   if (!file) return;
-  comprimirFoto(file, function(base64) {
+  comprimirFoto(file, base64 => {
     fotoBase64 = base64;
     document.getElementById('fotoPreview').innerHTML =
-      `<img src="${base64}"
-         style="width:90px;height:90px;object-fit:cover;border-radius:50%"/>`;
+      `<img src="${base64}" style="width:90px;height:90px;object-fit:cover;border-radius:50%"/>`;
   });
 }
 
-/* ════════════════════════════════
-   SALVAR FUNCIONÁRIO
-════════════════════════════════ */
+/* ════════ SALVAR ════════ */
 async function salvarFuncionario(event) {
   event.preventDefault();
-  if (!API_KEY || !BIN_ID) {
-    alert('Configure o banco primeiro!');
-    return;
-  }
-
+  if (!API_KEY || !BIN_ID) { alert('Configure o banco primeiro!'); return; }
   const btn = document.getElementById('btnSalvar');
-  btn.textContent = '⏳ Salvando...';
-  btn.disabled    = true;
-
+  btn.textContent = '⏳ Salvando...'; btn.disabled = true;
   const dados = {
     nome:      document.getElementById('inputNome').value.trim(),
     documento: document.getElementById('inputDoc').value.trim(),
@@ -598,84 +545,64 @@ async function salvarFuncionario(event) {
     cargo:     document.getElementById('inputCargo').value.trim(),
     foto:      fotoBase64 || null
   };
-
   try {
     const res = await fetch(`${JSONBIN}/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
     });
-    if (!res.ok) throw new Error('Erro ao buscar lista: ' + res.status);
+    if (!res.ok) throw new Error('Erro ao buscar: ' + res.status);
     const data = await res.json();
     let lista = data.record.funcionarios || [];
-
     if (editandoId) {
       lista = lista.map(f => f.id === editandoId ? { ...f, ...dados } : f);
       showToast('✅ Funcionário atualizado!');
     } else {
-      dados.id       = 'func_' + Date.now();
+      dados.id = 'func_' + Date.now();
       dados.criadoEm = new Date().toISOString();
       lista.push(dados);
       showToast('✅ Funcionário cadastrado!');
     }
-
     await salvarNoBin(lista);
     listaAtual = lista;
     fecharModal();
     renderizarFuncionarios(lista);
-
   } catch(e) {
     alert('Erro ao salvar:\n' + e.message);
   } finally {
-    btn.textContent = '💾 Salvar';
-    btn.disabled    = false;
+    btn.textContent = '💾 Salvar'; btn.disabled = false;
   }
 }
 
-/* ════════════════════════════════
-   EXCLUIR
-════════════════════════════════ */
+/* ════════ EXCLUIR ════════ */
 async function excluirFuncionario(id) {
   const func = listaAtual.find(f => f.id === id);
-  if (!func) return;
-  if (!confirm(`Deseja excluir "${func.nome}"?`)) return;
+  if (!func || !confirm(`Deseja excluir "${func.nome}"?`)) return;
   try {
     const res = await fetch(`${JSONBIN}/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
     });
     const data = await res.json();
-    const lista = (data.record.funcionarios || []).filter(f => f.id !== id);
+    const lista = (data.record.funcionarios||[]).filter(f => f.id !== id);
     await salvarNoBin(lista);
     listaAtual = lista;
     showToast('🗑️ Removido!');
     renderizarFuncionarios(lista);
-  } catch(e) {
-    alert('Erro ao excluir: ' + e.message);
-  }
+  } catch(e) { alert('Erro: ' + e.message); }
 }
 
-/* ════════════════════════════════
-   QR CODE — só ID + BinID na URL
-   Situação sempre atualizada! ✅
-════════════════════════════════ */
+/* ════════ QR CODE ════════ */
 function verQR(id) {
   const func = listaAtual.find(f => f.id === id);
   if (!func) return;
-
   const url = `https://pneusoenning.github.io/sistema-crachas/funcionario.html?id=${func.id}&bin=${BIN_ID}`;
-
   document.getElementById('qrNomeFuncionario').textContent = func.nome;
   document.getElementById('qrCodeDiv').innerHTML = '';
-
   setTimeout(() => {
     new QRCode(document.getElementById('qrCodeDiv'), {
-      text:         url,
-      width:        220,
-      height:       220,
-      colorDark:    '#1a237e',
-      colorLight:   '#ffffff',
+      text: url, width: 220, height: 220,
+      colorDark: '#1a237e', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
   }, 100);
-
   document.getElementById('modalQR').classList.add('ativo');
 }
 
@@ -688,9 +615,9 @@ function baixarQR() {
   setTimeout(() => {
     const canvas = document.querySelector('#qrCodeDiv canvas');
     if (!canvas) return;
-    const a    = document.createElement('a');
+    const a = document.createElement('a');
     a.download = 'qrcode-funcionario.png';
-    a.href     = canvas.toDataURL('image/png');
+    a.href = canvas.toDataURL('image/png');
     a.click();
   }, 300);
 }
