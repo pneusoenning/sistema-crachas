@@ -3,233 +3,259 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cartão de Identificação</title>
+  <title>Crachá Digital | Funcionário</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{
-      font-family:'Inter',sans-serif;min-height:100vh;
-      background:linear-gradient(135deg,#1565C0 0%,#1976D2 60%,#42A5F5 100%);
-      display:flex;align-items:center;justify-content:center;padding:20px
+      font-family:'Inter',sans-serif;
+      background:linear-gradient(135deg,#1a237e 0%,#283593 100%);
+      min-height:100vh;display:flex;
+      align-items:center;justify-content:center;padding:20px
     }
-    .id-card{
-      width:100%;max-width:390px;background:#fff;
-      border-radius:24px;overflow:hidden;
-      box-shadow:0 25px 60px rgba(0,0,0,0.3)
+    .card{
+      background:white;border-radius:24px;
+      width:100%;max-width:380px;overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,0.3)
     }
     .card-header{
-      background:linear-gradient(135deg,#1565C0 0%,#1976D2 50%,#42A5F5 100%);
-      padding:28px 24px 75px;text-align:center;position:relative
+      background:linear-gradient(135deg,#1a237e,#283593);
+      padding:28px 24px 20px;text-align:center;color:white
     }
-    .card-header-title{
-      color:rgba(255,255,255,0.85);font-size:0.8rem;font-weight:600;
-      text-transform:uppercase;letter-spacing:2px;margin-bottom:10px
-    }
-    .empresa-nome{
-      color:white;font-size:1.2rem;font-weight:800;
-      text-transform:uppercase;letter-spacing:2px
-    }
-    .foto-wrapper{
-      position:absolute;bottom:-55px;left:50%;transform:translateX(-50%)
-    }
-    .foto-circular{
+    .empresa{font-size:1rem;font-weight:800;letter-spacing:2px;opacity:0.9}
+    .titulo{font-size:0.75rem;opacity:0.7;margin-top:4px;letter-spacing:1px}
+    .foto-wrap{
       width:110px;height:110px;border-radius:50%;
-      border:5px solid #fff;object-fit:cover;
-      box-shadow:0 8px 25px rgba(0,0,0,0.2);display:block
-    }
-    .foto-placeholder-card{
-      width:110px;height:110px;border-radius:50%;
-      border:5px solid #fff;
-      background:linear-gradient(135deg,#e8eaf6,#c5cae9);
+      border:4px solid white;overflow:hidden;
+      margin:0 auto 12px;background:#e8eaf6;
       display:flex;align-items:center;justify-content:center;
-      font-size:3rem;box-shadow:0 8px 25px rgba(0,0,0,0.2)
+      font-size:3rem
     }
-    .card-body{padding:70px 24px 24px}
-    .info-field{
-      background:#f7f7f7;border-radius:12px;
-      padding:13px 16px;margin-bottom:10px
+    .foto-wrap img{width:100%;height:100%;object-fit:cover}
+    .card-body{padding:24px}
+    .campo{margin-bottom:16px}
+    .campo-label{
+      font-size:0.7rem;font-weight:700;
+      color:#9e9e9e;text-transform:uppercase;
+      letter-spacing:1px;margin-bottom:4px
     }
-    .field-label{
-      font-size:0.68rem;font-weight:700;color:#aaa;
-      text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px
+    .campo-valor{
+      font-size:1rem;font-weight:600;color:#1a237e
     }
-    .field-value{font-size:1rem;font-weight:700;color:#1a1a1a}
-    .situacao-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-    .badge-ativo-card{
-      background:#e8f5e9;color:#2e7d32;border:2px solid #a5d6a7;
-      border-radius:20px;padding:4px 16px;font-size:0.82rem;
-      font-weight:800;text-transform:uppercase;letter-spacing:1px
+    .badge{
+      display:inline-block;padding:6px 18px;
+      border-radius:20px;font-size:0.82rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:0.5px
     }
-    .badge-inativo-card{
-      background:#ffebee;color:#c62828;border:2px solid #ef9a9a;
-      border-radius:20px;padding:4px 16px;font-size:0.82rem;
-      font-weight:800;text-transform:uppercase;letter-spacing:1px
-    }
-    .verificado-text{
-      display:flex;align-items:center;gap:5px;
-      font-size:0.82rem;font-weight:600
-    }
+    .badge-ativo{background:#e8f5e9;color:#2e7d32;border:2px solid #2e7d32}
+    .badge-inativo{background:#ffebee;color:#c62828;border:2px solid #c62828}
     .card-footer{
-      border-top:1px solid #f0f0f0;
-      padding:14px 24px;text-align:center
+      background:#f5f5f5;padding:14px 24px;
+      display:flex;align-items:center;gap:8px;
+      border-top:1px solid #eee
     }
-    .card-footer p{font-size:0.75rem;color:#bbb;font-weight:500}
-    .status-box{text-align:center;padding:60px 24px;color:#aaa}
-    .status-box .icon{font-size:3rem;display:block;margin-bottom:12px}
+    .verificado{
+      font-size:0.75rem;color:#43a047;font-weight:600
+    }
+    .data-cadastro{
+      font-size:0.7rem;color:#aaa;margin-top:2px
+    }
+    /* Estado de loading */
+    .loading{
+      text-align:center;padding:40px 24px;color:#666
+    }
     .spinner{
       width:40px;height:40px;border:4px solid #e0e0e0;
-      border-top:4px solid #1565C0;border-radius:50%;
+      border-top-color:#1a237e;border-radius:50%;
       animation:spin 0.8s linear infinite;margin:0 auto 16px
     }
     @keyframes spin{to{transform:rotate(360deg)}}
+    /* Estado de erro */
+    .erro{
+      text-align:center;padding:40px 24px
+    }
+    .erro .icone{font-size:3rem;display:block;margin-bottom:12px}
+    .erro h3{color:#c62828;margin-bottom:8px}
+    .erro p{font-size:0.85rem;color:#888;line-height:1.5}
+    .divider{
+      height:1px;background:#f0f0f0;margin:12px 0
+    }
   </style>
 </head>
 <body>
-<div class="id-card">
 
-  <!-- CARREGANDO -->
-  <div class="status-box" id="loading">
+<div class="card" id="cartao">
+  <!-- Loading inicial -->
+  <div class="loading" id="estadoLoading">
     <div class="spinner"></div>
-    <p style="font-weight:600;color:#555">Buscando dados...</p>
-    <p style="font-size:0.8rem;margin-top:4px">Aguarde um momento</p>
+    <p style="font-weight:600;color:#1a237e">Buscando dados...</p>
+    <p style="font-size:0.8rem;color:#aaa;margin-top:4px">Aguarde um momento</p>
   </div>
 
-  <!-- ERRO -->
-  <div class="status-box" id="erro" style="display:none">
-    <span class="icon">❌</span>
-    <p style="color:#e53935;font-weight:600">Funcionário não encontrado.</p>
-    <p style="font-size:0.8rem;margin-top:8px">Verifique se o QR Code é válido.</p>
+  <!-- Estado de erro (oculto) -->
+  <div class="erro" id="estadoErro" style="display:none">
+    <span class="icone">❌</span>
+    <h3>Funcionário não encontrado</h3>
+    <p>Verifique se o QR Code é válido<br/>ou se o banco de dados está acessível.</p>
+    <p id="msgErroDetalhe" style="margin-top:8px;font-size:0.75rem;color:#bbb"></p>
   </div>
 
-  <!-- CONTEÚDO -->
-  <div id="conteudo" style="display:none">
+  <!-- Conteúdo do crachá (oculto até carregar) -->
+  <div id="estadoDados" style="display:none">
     <div class="card-header">
-      <div class="card-header-title">Cartão de Identificação</div>
-      <div class="empresa-nome">Pneus Oenning</div>
-      <div class="foto-wrapper">
-        <img id="cardFoto" class="foto-circular" src="" alt="Foto" style="display:none"/>
-        <div class="foto-placeholder-card" id="cardFotoPlaceholder">👤</div>
-      </div>
+      <div class="empresa">Pneus Oenning</div>
+      <div class="titulo">Cartão de Identificação</div>
+      <br/>
+      <div class="foto-wrap" id="fotoWrap">👤</div>
     </div>
+
     <div class="card-body">
-      <div class="info-field">
-        <div class="field-label">Nome Completo</div>
-        <div class="field-value" id="cardNome">—</div>
+      <div class="campo">
+        <div class="campo-label">👤 Nome Completo</div>
+        <div class="campo-valor" id="dadoNome">—</div>
       </div>
-      <div class="info-field">
-        <div class="field-label">Documento Colaborador</div>
-        <div class="field-value" id="cardDoc">—</div>
+
+      <div class="divider"></div>
+
+      <div class="campo">
+        <div class="campo-label">🪪 Documento Colaborador</div>
+        <div class="campo-valor" id="dadoDoc">—</div>
       </div>
-      <div class="info-field" id="cardCargoBox" style="display:none">
-        <div class="field-label">Cargo / Setor</div>
-        <div class="field-value" id="cardCargo">—</div>
+
+      <div class="divider"></div>
+
+      <div class="campo">
+        <div class="campo-label">🏢 Cargo / Setor</div>
+        <div class="campo-valor" id="dadoCargo">—</div>
       </div>
-      <div class="info-field">
-        <div class="field-label">Situação</div>
-        <div class="situacao-row">
-          <span id="cardBadge" class="badge-ativo-card">ATIVO</span>
-          <span class="verificado-text" id="verificadoText" style="color:#2e7d32">
-            ✅ Identidade Verificada
-          </span>
-        </div>
+
+      <div class="divider"></div>
+
+      <div class="campo">
+        <div class="campo-label">📌 Situação</div>
+        <span class="badge badge-ativo" id="dadoSituacao">ATIVO</span>
       </div>
     </div>
+
     <div class="card-footer">
-      <p>✓ Cartão válido e verificado</p>
-      <p style="margin-top:3px">
-        Cadastrado em <span id="cardData">—</span>
-      </p>
+      <div>
+        <div class="verificado">✅ Identidade Verificada</div>
+        <div class="data-cadastro" id="dadoData">Cadastrado em —</div>
+      </div>
     </div>
   </div>
-
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const id     = params.get('id');
-  const binId  = params.get('bin');
-  const apiKey = params.get('key');
+'use strict';
 
-  async function carregarDados() {
-    if (!id || !binId || !apiKey) {
-      mostrarErro();
+const JSONBIN = 'https://api.jsonbin.io/v3/b';
+
+// ─── Lê parâmetros da URL ───────────────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const FUNC_ID = params.get('id');   // ex: func_1780664359688
+const BIN_ID  = params.get('bin');  // ex: 6a22b855da38895dfe8bfad7
+
+// ─── Mostra erro amigável ───────────────────────────────────────────────────
+function mostrarErro(detalhe = '') {
+  document.getElementById('estadoLoading').style.display = 'none';
+  document.getElementById('estadoDados').style.display   = 'none';
+  document.getElementById('estadoErro').style.display    = 'block';
+  if (detalhe) {
+    document.getElementById('msgErroDetalhe').textContent = detalhe;
+  }
+}
+
+// ─── Preenche o crachá ──────────────────────────────────────────────────────
+function preencherCracha(func) {
+  // Foto
+  const fotoWrap = document.getElementById('fotoWrap');
+  if (func.foto) {
+    fotoWrap.innerHTML = `<img src="${func.foto}" alt="Foto"/>`;
+  } else {
+    fotoWrap.innerHTML = '👤';
+  }
+
+  // Dados
+  document.getElementById('dadoNome').textContent  = func.nome  || '—';
+  document.getElementById('dadoDoc').textContent   = func.documento || '—';
+  document.getElementById('dadoCargo').textContent = func.cargo || '—';
+
+  // Situação (badge dinâmico)
+  const badgeEl = document.getElementById('dadoSituacao');
+  const ativo   = (func.situacao || '').toLowerCase() === 'ativo';
+  badgeEl.textContent = ativo ? '✅ ATIVO' : '❌ INATIVO';
+  badgeEl.className   = `badge ${ativo ? 'badge-ativo' : 'badge-inativo'}`;
+
+  // Data de cadastro
+  if (func.criadoEm) {
+    const d = new Date(func.criadoEm);
+    document.getElementById('dadoData').textContent =
+      'Cadastrado em ' + d.toLocaleDateString('pt-BR');
+  }
+
+  // Exibe o crachá
+  document.getElementById('estadoLoading').style.display = 'none';
+  document.getElementById('estadoErro').style.display    = 'none';
+  document.getElementById('estadoDados').style.display   = 'block';
+}
+
+// ─── Busca principal (sem API Key — bin público) ────────────────────────────
+async function buscarFuncionario() {
+
+  // Valida parâmetros mínimos
+  if (!FUNC_ID || !BIN_ID) {
+    mostrarErro('Parâmetros "id" e "bin" são obrigatórios na URL.');
+    return;
+  }
+
+  try {
+    // ✅ Tenta buscar SEM API Key (bin público)
+    const url = `${JSONBIN}/${BIN_ID}/latest`;
+    const res  = await fetch(url, {
+      headers: { 'X-Bin-Meta': 'false' }   // reduz payload desnecessário
+    });
+
+    // Se o bin for privado, retorna 401
+    if (res.status === 401) {
+      mostrarErro('O banco está privado. Acesse o JSONBin e torne-o público.');
       return;
     }
 
-    try {
-      const res = await fetch(
-        `https://api.jsonbin.io/v3/b/${binId}/latest`,
-        { headers: { 'X-Master-Key': apiKey } }
-      );
-
-      if (!res.ok) throw new Error('Erro ' + res.status);
-
-      const data = await res.json();
-      const lista = data.record.funcionarios || [];
-      const func  = lista.find(f => f.id === id);
-
-      if (!func) { mostrarErro(); return; }
-
-      preencherCard(func);
-
-    } catch(e) {
-      mostrarErro();
+    if (!res.ok) {
+      mostrarErro(`Erro ao acessar o banco: HTTP ${res.status}`);
+      return;
     }
+
+    const data = await res.json();
+
+    // JSONBin retorna { record: { funcionarios: [...] } }
+    const lista = data.record?.funcionarios || data.funcionarios || [];
+
+    if (lista.length === 0) {
+      mostrarErro('O banco está vazio ou sem funcionários cadastrados.');
+      return;
+    }
+
+    // Busca pelo ID exato
+    const func = lista.find(f => f.id === FUNC_ID);
+
+    if (!func) {
+      mostrarErro(`ID "${FUNC_ID}" não encontrado no banco.`);
+      return;
+    }
+
+    // Tudo certo!
+    preencherCracha(func);
+
+  } catch (err) {
+    console.error('Erro ao buscar funcionário:', err);
+    mostrarErro('Erro de conexão: ' + err.message);
   }
+}
 
-  function preencherCard(func) {
-    // FOTO
-    if (func.foto) {
-      const img = document.getElementById('cardFoto');
-      img.src = func.foto;
-      img.style.display = 'block';
-      document.getElementById('cardFotoPlaceholder').style.display = 'none';
-    }
-
-    // NOME
-    document.getElementById('cardNome').textContent = func.nome;
-
-    // DOCUMENTO
-    document.getElementById('cardDoc').textContent = func.documento;
-
-    // CARGO
-    if (func.cargo) {
-      document.getElementById('cardCargo').textContent = func.cargo;
-      document.getElementById('cardCargoBox').style.display = 'block';
-    }
-
-    // SITUAÇÃO — sempre atualizada! ✅
-    const badge      = document.getElementById('cardBadge');
-    const verificado = document.getElementById('verificadoText');
-    if (func.situacao === 'Ativo') {
-      badge.textContent      = 'ATIVO';
-      badge.className        = 'badge-ativo-card';
-      verificado.innerHTML   = '✅ Identidade Verificada';
-      verificado.style.color = '#2e7d32';
-    } else {
-      badge.textContent      = 'INATIVO';
-      badge.className        = 'badge-inativo-card';
-      verificado.innerHTML   = '⚠️ Colaborador Inativo';
-      verificado.style.color = '#c62828';
-    }
-
-    // DATA
-    if (func.criadoEm) {
-      document.getElementById('cardData').textContent =
-        new Date(func.criadoEm).toLocaleDateString('pt-BR');
-    }
-
-    document.getElementById('loading').style.display  = 'none';
-    document.getElementById('conteudo').style.display = 'block';
-  }
-
-  function mostrarErro() {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('erro').style.display    = 'block';
-  }
-
-  // Carrega ao abrir a página
-  carregarDados();
+// ─── Inicia ─────────────────────────────────────────────────────────────────
+buscarFuncionario();
 </script>
 </body>
 </html>
